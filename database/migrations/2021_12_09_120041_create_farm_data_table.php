@@ -13,15 +13,15 @@ class CreateFarmDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('farm_list', function (Blueprint $table) {
+        Schema::create('farms', function (Blueprint $table) {
             $table->id();
             $table->string('location');
             $table->timestamps();
         });
 
-        Schema::create('farm_data', function (Blueprint $table) {
+        Schema::create('data_points', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('location_id')->constrained('farm_list')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('farm_id')->constrained('farms')->onUpdate('cascade')->onDelete('cascade');
             $table->string('datetime');
             $table->string('sensortype');
             $table->decimal('value', 10, 2);
@@ -36,7 +36,7 @@ class CreateFarmDataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('farm_data');
-        Schema::dropIfExists('farm_list');
+        Schema::dropIfExists('farms');
+        Schema::dropIfExists('data_points');
     }
 }
