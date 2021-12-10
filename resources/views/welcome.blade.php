@@ -6,5 +6,11 @@
         <title>Solita Dev Academy Exercise</title>
     </head>
     <body>
+        <form action="/upload" enctype="multipart/form-data" method="post">
+            {{ csrf_field() }}
+            <input type="file" id="file" name="file">
+            <br>
+            <button type=submit>Send</button>
+        </form>
     </body>
 </html>

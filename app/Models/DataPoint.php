@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DataPoint extends Model
 {
+    protected $fillable = ['farm_id', 'datetime', 'sensortype', 'value'];
+
     use HasFactory;
 
     public function farm()
