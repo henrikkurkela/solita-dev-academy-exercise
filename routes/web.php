@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\FarmController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,5 @@ Route::get('/', function () {
 });
 
 Route::post('/upload', [UploadController::class, 'upload']);
+Route::post('/location/add', [FarmController::class, 'addFarm']);
+Route::post('/location/removeall', [FarmController::class, 'removeAllFarms']);

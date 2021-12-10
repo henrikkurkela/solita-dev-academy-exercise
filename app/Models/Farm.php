@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Farm extends Model
 {
+    protected $fillable = ['location'];
+
     use HasFactory;
 
     public function dataPoints()
