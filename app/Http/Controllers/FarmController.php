@@ -12,16 +12,17 @@ class FarmController extends Controller
     public function addFarm(Request $request)
     {
         $location = Farm::firstOrCreate([
-            'location' => $request->location
+            'location' => $request->location,
+            'user_id' => auth()->id()
         ]);
 
-        return view('location.add', ['location' => $location]);
+        return view('dashboard')->with(['message' => "Location $location->location created successfully."]);
     }
 
     public function removeAllFarms()
     {
         Farm::select('*')->delete();
 
-        return view('location.removeall');
+        return view('dashboard')->with(['message' => "All measurement and location data removed successfully"]);
     }
 }

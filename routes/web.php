@@ -17,9 +17,15 @@ use App\Http\Controllers\FarmController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('dashboard');
 });
 
-Route::post('/upload', [UploadController::class, 'upload']);
-Route::post('/location/add', [FarmController::class, 'addFarm']);
-Route::post('/location/removeall', [FarmController::class, 'removeAllFarms']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+Route::post('/upload', [UploadController::class, 'upload'])->middleware(['auth']);
+Route::post('/location/add', [FarmController::class, 'addFarm'])->middleware(['auth']);
+Route::post('/location/removeall', [FarmController::class, 'removeAllFarms'])->middleware(['auth']);
+
+require __DIR__.'/auth.php';

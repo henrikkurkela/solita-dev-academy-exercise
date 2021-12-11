@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Farm extends Model
 {
-    protected $fillable = ['location'];
+    protected $fillable = ['location', 'user_id'];
 
     use HasFactory;
 

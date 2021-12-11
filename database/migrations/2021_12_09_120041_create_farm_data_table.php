@@ -13,8 +13,19 @@ class CreateFarmDataTable extends Migration
      */
     public function up()
     {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
         Schema::create('farms', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('location');
             $table->timestamps();
         });
@@ -36,7 +47,8 @@ class CreateFarmDataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('farms');
         Schema::dropIfExists('data_points');
+        Schema::dropIfExists('farms');
+        Schema::dropIfExists('users');
     }
 }
