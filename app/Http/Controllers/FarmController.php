@@ -16,13 +16,13 @@ class FarmController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return redirect('dashboard')->with('status', "Location $location->location created successfully.");
+        return redirect('dashboard')->with('success', "Location $location->location created successfully.");
     }
 
     public function removeAllFarms()
     {
         Farm::select('*')->delete();
 
-        return redirect('dashboard')->with('status', "All measurement and location data removed successfully");
+        return redirect('dashboard')->with('success', "All measurement and location data removed successfully");
     }
 }

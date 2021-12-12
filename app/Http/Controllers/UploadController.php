@@ -15,7 +15,6 @@ class UploadController extends Controller
         $rows = explode("\n", $request->file->get());
         $acceptedRows = 0;
         $declinedRows = 0;
-        $declinedRowsData = [];
         foreach ($rows as $row)
         {
             $fields = explode(",", $row);
@@ -70,15 +69,9 @@ class UploadController extends Controller
 
                 $acceptedRows = $acceptedRows + 1;
             } catch (\Exception $error) {
-                array_push($declinedRowsData, [$row, $error->getMessage()]);
                 $declinedRows = $declinedRows + 1;
             }
         }
-        return view('upload', [
-            'rowCount' => count($rows),
-            'acceptedRows' => $acceptedRows,
-            'declinedRows' => $declinedRows,
-            'declinedRowsData' => $declinedRowsData
-        ]);
+        return redirect('dashboard')->with('success', "Processed a total of " . count($rows) . " rows. $acceptedRows measurements were accepted, $declinedRows measurements were declined.");
     }
 }
