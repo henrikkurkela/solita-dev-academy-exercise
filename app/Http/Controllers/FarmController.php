@@ -20,27 +20,32 @@ class FarmController extends Controller
         return redirect('dashboard')->with('success', "Location $location->location created successfully.");
     }
 
-    public function getFarm(Request $request)
+    public function getFarm(Request $request, $id)
     {
         try {
             $location = Farm::where([
-                'id' => $request->id,
+                'id' => $id,
                 'user_id' => auth()->id()
             ])->firstOrFail();
 
-            $dataPoints = $location->dataPoints()->count();
+            $measurements = $location->dataPoints()->count();
+            $dataPoints = $location->dataPoints()->paginate(100);
 
-            return redirect('dashboard')->with('success', "Location $location->location opened successfully. " . $dataPoints . " measurement points stored for this location.");
+            return view('location', [
+                'success' => "Location $location->location opened successfully. " . $measurements . " measurement points stored for this location.",
+                'dataPoints' => $dataPoints,
+                'location' => $location
+            ]);
         } catch (\Exception $error) {
-            return redirect('dashboard')->with('error', "Error encountered while opening location, try again later.");
+            return redirect('dashboard')->with('error', $error->getMessage());
         }
     }
 
-    public function removeFarm(Request $request)
+    public function removeFarm(Request $request, $id)
     {
         try {
             $location = Farm::where([
-                'id' => $request->id,
+                'id' => $id,
                 'user_id' => auth()->id()
             ])->firstOrFail();
 
