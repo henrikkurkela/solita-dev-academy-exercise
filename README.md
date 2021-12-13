@@ -7,7 +7,8 @@ This farm data visualization app is built as an application exercise for Solita 
 - 2021-12-09: Start project, research Laravel beginner basics, simple SQL models for farms and data points. Add PHPMyAdmin to container. (2h)
 - 2021-12-10: Farm creation functionality, clear DB functionality. import CSV functionality. (2h)
 - 2021-12-11: Authentication with Laravel Breeze. (2h)
-- 2021-12-12: Dashboard controller, learing some Tailwind basics. (2h)
+- 2021-12-12: Dashboard controller, learning some Tailwind basics. (2h)
+- 2021-12-13: Farm removal functionality, start work onf get farm functionality, error message component (1h)
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 

@@ -24,7 +24,20 @@ Route::get('/', function () {
 Route::get('/dashboard', [Controller::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 
 Route::post('/upload', [UploadController::class, 'upload'])->middleware(['auth']);
+
 Route::post('/location/add', [FarmController::class, 'addFarm'])->middleware(['auth']);
+Route::post('/location/get', [FarmController::class, 'getFarm'])->middleware(['auth']);
+Route::post('/location/remove', [FarmController::class, 'removeFarm'])->middleware(['auth']);
+
+/*
+|--------------------------------------------------------------------------
+| Dev Test Routes
+|--------------------------------------------------------------------------
+|
+| These routes should be removed before production.
+|
+*/
+
 Route::post('/location/removeall', [FarmController::class, 'removeAllFarms'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';
