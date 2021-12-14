@@ -11,21 +11,9 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-success-message :success="$success ?? ''" />
                     <x-error-message />
-                    <table>
-                        <tr>
-                            <th>Sensor</th>
-                            <th>Value</th>
-                            <th>Time</th>
-                        </tr>
-                        @foreach ($dataPoints as $dataPoint)
-                        <tr>
-                            <td>{{ $dataPoint->sensortype }}</td>
-                            <td>{{ $dataPoint->value }}</td>
-                            <td>{{ $dataPoint->datetime }}</td>
-                        </tr>
-                        @endforeach
-                    </table>
-                    {{ $dataPoints->links() }}
+                    <form action="/location/{{ $location->id }}/datapoints" method="GET">
+                        <x-button class="block m-1" type="submit">Data points</x-button>
+                    </form>
                 </div>
             </div>
         </div>

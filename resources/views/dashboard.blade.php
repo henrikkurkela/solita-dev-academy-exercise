@@ -18,11 +18,12 @@
                         <div class="flex flex-row justify-between">
                             <p>{{ $farm->location }}</p>
                             <div class="flex flex-row">
-                                <form action="/location/remove/{{ $farm->id }}" method="POST">
+                                <form action="/location/{{ $farm->id }}" method="POST">
+                                    @method('DELETE')
                                     {{ csrf_field() }}
                                     <x-button class="block m-1" type="submit">Delete location</x-button>
                                 </form>
-                                <form action="/location/get/{{ $farm->id }}" method="GET">
+                                <form action="/location/{{ $farm->id }}" method="GET">
                                     {{ csrf_field() }}
                                     <x-button class="block m-1" type="submit">Open location</x-button>
                                 </form>
@@ -33,7 +34,7 @@
                     @endif
                     <div class="flex flex-row">
                         <div class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
-                            <form class="flex flex-col items-center" action="/location/add" method="POST">
+                            <form class="flex flex-col items-center" action="/location" method="POST">
                                 <h2 class="font-semibold text-l leading-tight">Add new location</h2>
                                 {{ csrf_field() }}
                                 <x-label class="block m-1 w-full" for="location" value="Location"></x-label>

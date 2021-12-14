@@ -28,11 +28,32 @@ class FarmController extends Controller
                 'user_id' => auth()->id()
             ])->firstOrFail();
 
+            $dataPoints = $location->dataPoints()->get();
+
+            return view('location', [
+                'success' => "Location $location->location opened successfully.",
+                'dataPoints' => $dataPoints,
+                'location' => $location
+            ]);
+
+        } catch (\Exception $error) {
+            return redirect('dashboard')->with('error', $error->getMessage());
+        }
+    }
+
+    public function getFarmTable(Request $request, $id)
+    {
+        try {
+            $location = Farm::where([
+                'id' => $id,
+                'user_id' => auth()->id()
+            ])->firstOrFail();
+
             $measurements = $location->dataPoints()->count();
             $dataPoints = $location->dataPoints()->paginate(100);
 
-            return view('location', [
-                'success' => "Location $location->location opened successfully. " . $measurements . " measurement points stored for this location.",
+            return view('location.table', [
+                'success' => $measurements . " recorded measurement points for this location.",
                 'dataPoints' => $dataPoints,
                 'location' => $location
             ]);
