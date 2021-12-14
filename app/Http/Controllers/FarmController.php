@@ -28,11 +28,15 @@ class FarmController extends Controller
                 'user_id' => auth()->id()
             ])->firstOrFail();
 
-            $dataPoints = $location->dataPoints()->get();
+            $temperatures = $location->dataPoints()->where('sensortype', 'temperature')->get(['value AS y', 'datetime as x'])->toArray();
+            $phs = $location->dataPoints()->where('sensortype', 'pH')->get(['value AS y', 'datetime as x'])->toArray();
+            $rainfalls = $location->dataPoints()->where('sensortype', 'rainFall')->get(['value AS y', 'datetime as x'])->toArray();
 
             return view('location', [
                 'success' => "Location $location->location opened successfully.",
-                'dataPoints' => $dataPoints,
+                'temperatures' => $temperatures,
+                'phs' => $phs,
+                'rainfalls' => $rainfalls,
                 'location' => $location
             ]);
 
@@ -50,7 +54,7 @@ class FarmController extends Controller
             ])->firstOrFail();
 
             $measurements = $location->dataPoints()->count();
-            $dataPoints = $location->dataPoints()->paginate(100);
+            $dataPoints = $location->dataPoints()->orderByDesc('datetime')->paginate(100);
 
             return view('location.table', [
                 'success' => $measurements . " recorded measurement points for this location.",
