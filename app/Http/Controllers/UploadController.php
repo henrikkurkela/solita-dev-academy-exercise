@@ -12,9 +12,11 @@ class UploadController extends Controller
 {
     public function upload(Request $request)
     {
+        $startTime = microtime(true); 
         $rows = explode("\n", $request->file->get());
         $acceptedRows = 0;
-        $declinedRows = 0;
+        $rejectedRows = 0;
+
         foreach ($rows as $row)
         {
             $fields = explode(",", $row);
@@ -69,9 +71,12 @@ class UploadController extends Controller
 
                 $acceptedRows = $acceptedRows + 1;
             } catch (\Exception $error) {
-                $declinedRows = $declinedRows + 1;
+                $rejectedRows = $rejectedRows + 1;
             }
         }
-        return redirect('dashboard')->with('success', "Processed a total of " . count($rows) . " rows. $acceptedRows measurements were accepted, $declinedRows measurements were declined.");
+
+        $runtime = microtime(true) - $startTime;
+
+        return redirect('dashboard')->with('success', "Processed a total of " . count($rows) . " rows in $runtime seconds. $acceptedRows measurements were accepted, $rejectedRows measurements were rejected.");
     }
 }

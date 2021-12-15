@@ -25,6 +25,7 @@ services:
             - mysql
     mysql:
         image: 'mysql/mysql-server:8.0'
+        command: --innodb_flush_log_at_trx_commit=0
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
         environment:
