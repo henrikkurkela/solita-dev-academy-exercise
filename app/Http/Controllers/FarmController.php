@@ -45,7 +45,7 @@ class FarmController extends Controller
         }
     }
 
-    public function getFarmTable(Request $request, $id)
+    public function getFarmTable(Request $request, $id, $sensor)
     {
         try {
             $location = Farm::where([
@@ -54,12 +54,36 @@ class FarmController extends Controller
             ])->firstOrFail();
 
             $measurements = $location->dataPoints()->count();
-            $dataPoints = $location->dataPoints()->orderByDesc('datetime')->paginate(100);
+            $dataPoints =$location->dataPoints();
+
+            if(isset($request->from)) {
+                $dataPoints = $dataPoints->whereDate('datetime', '>=', date($request->from));   
+            }
+
+            if(isset($request->to)) {
+                $dataPoints = $dataPoints->whereDate('datetime', '<=', date($request->from));
+            }
+            
+            switch($sensor) {
+                case 'temperature':
+                    $dataPoints = $dataPoints->where('sensortype', 'temperature')->orderByDesc('datetime')->paginate(100);
+                    break;
+                case 'pH':
+                    $dataPoints = $dataPoints->where('sensortype', 'pH')->orderByDesc('datetime')->paginate(100);
+                    break;
+                case 'rainFall':
+                    $dataPoints = $dataPoints->where('sensortype', 'rainFall')->orderByDesc('datetime')->paginate(100);
+                    break;
+                default:
+                    $dataPoints = $dataPoints->orderByDesc('datetime')->paginate(100);
+            }
 
             return view('location.table', [
                 'success' => $measurements . " recorded measurement points for this location.",
                 'dataPoints' => $dataPoints,
-                'location' => $location
+                'location' => $location,
+                'from' => $request->from ?? '',
+                'to' => $request->to ?? ''
             ]);
         } catch (\Exception $error) {
             return redirect('dashboard')->with('error', $error->getMessage());
