@@ -22,6 +22,18 @@
                                 <x-label for="end">To</x-label>
                                 <input type="date" name="to" id="to" value="{{ $to ?? '' }}">
                             </div>
+                            <div class="m-1">
+                                <x-label for="pagination">Results per page</x-label>
+                                <select id="pagination" name="pagination">
+                                    @foreach ([100, 25, 10] as $item)
+                                    @if(isset($pagination) && $pagination == $item)
+                                    <option value="{{ $item }}" selected="true">{{ $item }}</option>
+                                    @else
+                                    <option value="{{ $item }}">{{ $item }}</option>
+                                    @endif
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <x-button class="block m-1" type="submit"
                             formaction="/location/{{ $location->id }}/datapoints/all">

@@ -12,6 +12,10 @@ class FarmController extends Controller
 {
     public function addFarm(Request $request)
     {
+        $request->validate([
+            'location' => 'required|unique:farms'
+        ]);
+
         $location = Farm::firstOrCreate([
             'location' => $request->location,
             'user_id' => auth()->id()
@@ -41,12 +45,18 @@ class FarmController extends Controller
             ]);
 
         } catch (\Exception $error) {
-            return redirect('dashboard')->with('error', $error->getMessage());
+            return redirect('dashboard')->withErrors($error->getMessage());
         }
     }
 
     public function getFarmTable(Request $request, $id, $sensor)
     {
+        $request->validate([
+            'from' => 'nullable|date',
+            'to' => 'nullable|date',
+            'pagination' => 'nullable|numeric'
+        ]);
+
         try {
             $location = Farm::where([
                 'id' => $id,
@@ -61,21 +71,38 @@ class FarmController extends Controller
             }
 
             if(isset($request->to)) {
-                $dataPoints = $dataPoints->whereDate('datetime', '<=', date($request->from));
+                $dataPoints = $dataPoints->whereDate('datetime', '<=', date($request->to));
             }
             
             switch($sensor) {
                 case 'temperature':
-                    $dataPoints = $dataPoints->where('sensortype', 'temperature')->orderByDesc('datetime')->paginate(100);
+                    $dataPoints = $dataPoints->where('sensortype', 'temperature')->orderByDesc('datetime');
                     break;
                 case 'pH':
-                    $dataPoints = $dataPoints->where('sensortype', 'pH')->orderByDesc('datetime')->paginate(100);
+                    $dataPoints = $dataPoints->where('sensortype', 'pH')->orderByDesc('datetime');
                     break;
                 case 'rainFall':
-                    $dataPoints = $dataPoints->where('sensortype', 'rainFall')->orderByDesc('datetime')->paginate(100);
+                    $dataPoints = $dataPoints->where('sensortype', 'rainFall')->orderByDesc('datetime');
                     break;
                 default:
-                    $dataPoints = $dataPoints->orderByDesc('datetime')->paginate(100);
+                    $dataPoints = $dataPoints->orderByDesc('datetime');
+            }
+
+            if (isset($request->pagination)) {
+                switch($request->pagination) {
+                    case '10':
+                        $dataPoints = $dataPoints->paginate(10);
+                        break;
+                    case '25':
+                        $dataPoints = $dataPoints->paginate(25);
+                        break;
+                    case '100':
+                    default:
+                        $dataPoints = $dataPoints->paginate(100);
+                        break;
+                }
+            } else {
+                $dataPoints = $dataPoints->paginate(100);
             }
 
             return view('location.table', [
@@ -83,10 +110,11 @@ class FarmController extends Controller
                 'dataPoints' => $dataPoints,
                 'location' => $location,
                 'from' => $request->from ?? '',
-                'to' => $request->to ?? ''
+                'to' => $request->to ?? '',
+                'pagination' => $request->pagination ?? ''
             ]);
         } catch (\Exception $error) {
-            return redirect('dashboard')->with('error', $error->getMessage());
+            return redirect('dashboard')->withErrors($error->getMessage());
         }
     }
 
@@ -102,7 +130,7 @@ class FarmController extends Controller
 
             return redirect('dashboard')->with('success', "Location $location->location removed successfully.");
         } catch (\Exception $error) {
-            return redirect('dashboard')->with('error', "Error encountered while removing location, try again later.");
+            return redirect('dashboard')->withErrors("Error encountered while removing location, try again later.");
         }
     }
 
