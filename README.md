@@ -12,7 +12,7 @@ This farm data visualization app is built as an application exercise for Solita 
 - 2021-12-14: Basic charts for location sensor values, better routes (2h)
 - 2021-12-15: Set InnoDB Flush Log at TRX Commit 0 to favor insert speed over ACID compliance, show processing time for CSV imports (1h)
 - 2021-12-16: Ability to filter measurements by type and date interval (1h)
-- 2021-12-17: Add form evaluation for farm controller requests, add ability to change items per page shown for measurements pagination (1h)
+- 2021-12-17: Add form evaluation for farm controller requests, add ability to change items per page shown for measurements pagination, prettier measurements table form (2h)
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 

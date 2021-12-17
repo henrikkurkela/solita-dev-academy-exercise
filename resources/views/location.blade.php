@@ -20,7 +20,7 @@
                     <div>
                         <canvas id="rainfall"></canvas>
                     </div>
-                    <form action="/location/{{ $location->id }}/datapoints/all" method="GET">
+                    <form action="/location/{{ $location->id }}/datapoints" method="GET">
                         {{ csrf_field() }}
                         <x-button class="block m-1" type="submit">Data points</x-button>
                     </form>

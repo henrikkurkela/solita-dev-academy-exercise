@@ -16,15 +16,32 @@
                         <div class="flex flex-row">
                             <div class="m-1">
                                 <x-label for="from">From</x-label>
-                                <input type="date" name="from" id="from" value="{{ $from ?? '' }}">
+                                <x-input type="date" name="from" id="from" value="{{ $from ?? '' }}" />
                             </div>
                             <div class="m-1">
                                 <x-label for="end">To</x-label>
-                                <input type="date" name="to" id="to" value="{{ $to ?? '' }}">
+                                <x-input type="date" name="to" id="to" value="{{ $to ?? '' }}" />
+                            </div>
+                            <div class="m-1">
+                                <x-label for="sensor">Sensor</x-label>
+                                <x-select id="sensor" name="sensor">
+                                    @foreach (array(
+                                    array('All', 'all'),
+                                    array('Temperature', 'temperature'),
+                                    array('pH', 'pH'),
+                                    array('Rainfall', 'rainFall')
+                                    ) as $item)
+                                    @if(isset($sensor) && $sensor == $item[1])
+                                    <option value="{{ $sensor }}" selected="true">{{ $item[0] }}</option>
+                                    @else
+                                    <option value="{{ $item[1] }}">{{ $item[0] }}</option>
+                                    @endif
+                                    @endforeach
+                                </x-select>
                             </div>
                             <div class="m-1">
                                 <x-label for="pagination">Results per page</x-label>
-                                <select id="pagination" name="pagination">
+                                <x-select id="pagination" name="pagination">
                                     @foreach ([100, 25, 10] as $item)
                                     @if(isset($pagination) && $pagination == $item)
                                     <option value="{{ $item }}" selected="true">{{ $item }}</option>
@@ -32,24 +49,11 @@
                                     <option value="{{ $item }}">{{ $item }}</option>
                                     @endif
                                     @endforeach
-                                </select>
+                                </x-select>
                             </div>
                         </div>
-                        <x-button class="block m-1" type="submit"
-                            formaction="/location/{{ $location->id }}/datapoints/all">
-                            All measurements
-                        </x-button>
-                        <x-button class="block m-1" type="submit"
-                            formaction="/location/{{ $location->id }}/datapoints/temperature">
-                            Temperatures
-                        </x-button>
-                        <x-button class="block m-1" type="submit"
-                            formaction="/location/{{ $location->id }}/datapoints/pH">
-                            pH measurements
-                        </x-button>
-                        <x-button class="block m-1" type="submit"
-                            formaction="/location/{{ $location->id }}/datapoints/rainFall">
-                            Rainfall measurements
+                        <x-button class="block m-1" type="submit" formaction="/location/{{ $location->id }}/datapoints">
+                            Apply
                         </x-button>
                     </form>
                     <table class="w-full whitespace-no-wrap">
@@ -66,7 +70,7 @@
                         </tr>
                         @endforeach
                     </table>
-                    {{ $dataPoints->links() }}
+                    {{ $dataPoints->appends($_GET)->links() }}
                 </div>
             </div>
         </div>

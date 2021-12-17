@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 use App\Models\Farm;
 use App\Models\DataPoint;
@@ -49,11 +50,15 @@ class FarmController extends Controller
         }
     }
 
-    public function getFarmTable(Request $request, $id, $sensor)
+    public function getFarmTable(Request $request, $id)
     {
         $request->validate([
             'from' => 'nullable|date',
             'to' => 'nullable|date',
+            'sensor' => [
+                'nullable',
+                Rule::in(['temperature', 'pH', 'rainFall', 'all'])
+            ],
             'pagination' => 'nullable|numeric'
         ]);
 
@@ -74,7 +79,7 @@ class FarmController extends Controller
                 $dataPoints = $dataPoints->whereDate('datetime', '<=', date($request->to));
             }
             
-            switch($sensor) {
+            switch($request->sensor ?? '') {
                 case 'temperature':
                     $dataPoints = $dataPoints->where('sensortype', 'temperature')->orderByDesc('datetime');
                     break;
@@ -111,6 +116,7 @@ class FarmController extends Controller
                 'location' => $location,
                 'from' => $request->from ?? '',
                 'to' => $request->to ?? '',
+                'sensor' => $request->sensor ?? '',
                 'pagination' => $request->pagination ?? ''
             ]);
         } catch (\Exception $error) {
