@@ -17,17 +17,10 @@
                         @foreach( $farms as $farm )
                         <div class="flex flex-row justify-between">
                             <p>{{ $farm->location }}</p>
-                            <div class="flex flex-row">
-                                <form action="/location/{{ $farm->id }}" method="POST">
-                                    @method('DELETE')
-                                    {{ csrf_field() }}
-                                    <x-button class="block m-1" type="submit">Delete location</x-button>
-                                </form>
-                                <form action="/location/{{ $farm->id }}" method="GET">
-                                    {{ csrf_field() }}
-                                    <x-button class="block m-1" type="submit">Open location</x-button>
-                                </form>
-                            </div>
+                            <form action="/location/{{ $farm->id }}" method="GET">
+                                {{ csrf_field() }}
+                                <x-button class="block m-1" type="submit">Open location</x-button>
+                            </form>
                         </div>
                         @endforeach
                     </div>
@@ -38,8 +31,7 @@
                                 <h2 class="font-semibold text-l leading-tight">Add new location</h2>
                                 {{ csrf_field() }}
                                 <x-label class="block m-1 w-full" for="location" value="Location"></x-label>
-                                <x-input class="block m-1 w-full" id="location" class="block mt-1 w-full"
-                                    name="location" required></x-input>
+                                <x-input class="block m-1 w-full" id="location" name="location" required></x-input>
                                 <x-button class="block m-1" type=submit>Add location</x-button>
                             </form>
                         </div>

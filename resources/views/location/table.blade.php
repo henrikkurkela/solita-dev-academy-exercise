@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-success-message />
                     <x-error-message />
-                    <form action="/location/{{ $location->id }}/datapoints/all" method="GET">
+                    <form action="/location/{{ $location->id }}/datapoints" method="GET">
                         {{ csrf_field() }}
                         <div class="flex flex-row">
                             <div class="m-1">
@@ -52,7 +52,7 @@
                                 </x-select>
                             </div>
                         </div>
-                        <x-button class="block m-1" type="submit" formaction="/location/{{ $location->id }}/datapoints">
+                        <x-button class="block m-1" type="submit">
                             Apply
                         </x-button>
                     </form>

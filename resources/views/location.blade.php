@@ -19,9 +19,9 @@
                             <i class="fas fa-temperature-high fa-2x mr-1"></i>
                             <div>
                                 <h2 class="font-semibold text-l leading-tight">
-                                    {{ end($temperatures)['y'] ?? '-' }} °C
+                                    {{ $temperature->value ?? '-' }} °C
                                 </h2>
-                                <p>{{ end($temperatures)['x'] ?? '-' }}</p>
+                                <p>{{ $temperature->datetime ?? '-' }}</p>
                             </div>
                         </div>
                         <div
@@ -29,9 +29,9 @@
                             <i class="fas fa-flask fa-2x mr-1"></i>
                             <div>
                                 <h2 class="font-semibold text-l leading-tight">
-                                    pH {{ end($phs)['y'] ?? '-' }}
+                                    pH {{ $pH->value ?? '-' }}
                                 </h2>
-                                <p>{{ end($phs)['x'] ?? '-' }}</p>
+                                <p>{{ $pH->datetime ?? '-' }}</p>
                             </div>
                         </div>
                         <div
@@ -39,25 +39,67 @@
                             <i class="fas fa-cloud-rain fa-2x mr-1"></i>
                             <div>
                                 <h2 class="font-semibold text-l leading-tight">
-                                    {{ end($rainfalls)['y'] ?? '-' }} mm
+                                    {{ $rainFall->value ?? '-' }} mm
                                 </h2>
-                                <p>{{ end($rainfalls)['x'] ?? '-' }}</p>
+                                <p>{{ $rainFall->datetime ?? '-' }}</p>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <canvas id="temperature"></canvas>
+                    <div class="w-auto m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
+                        <form action="/location/{{ $location->id }}" method="GET">
+                            {{ csrf_field() }}
+                            <div class="flex flex-row">
+                                <div class="m-1">
+                                    <x-label for="from">From</x-label>
+                                    <x-input type="date" name="from" id="from" value="{{ $from ?? '' }}" />
+                                </div>
+                                <div class="m-1">
+                                    <x-label for="end">To</x-label>
+                                    <x-input type="date" name="to" id="to" value="{{ $to ?? '' }}" />
+                                </div>
+                                <div class="m-1">
+                                    <x-label for="sensor">Sensor</x-label>
+                                    <x-select id="sensor" name="sensor">
+                                        @foreach (array(
+                                        array('Temperature', 'temperature'),
+                                        array('pH', 'pH'),
+                                        array('Rainfall', 'rainFall')
+                                        ) as $item)
+                                        @if(isset($sensor) && $sensor == $item[1])
+                                        <option value="{{ $sensor }}" selected="true">{{ $item[0] }}</option>
+                                        @else
+                                        <option value="{{ $item[1] }}">{{ $item[0] }}</option>
+                                        @endif
+                                        @endforeach
+                                    </x-select>
+                                </div>
+                            </div>
+                            <x-button class="block m-1" type="submit">
+                                Apply
+                            </x-button>
+                            <x-button class="block m-1" type="submit"
+                                formaction="/location/{{ $location->id }}/datapoints">
+                                Data points
+                            </x-button>
+                        </form>
+                        <div>
+                            <canvas id="canvas"></canvas>
+                        </div>
                     </div>
-                    <div>
-                        <canvas id="ph"></canvas>
+                    <div class="flex flex-row">
+                        <div class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
+                            <form class="flex flex-col items-center" action="/location/{{ $location->id }}" method="POST">
+                                <h2 class="font-semibold text-l leading-tight">Delete location</h2>
+                                @method('DELETE')
+                                {{ csrf_field() }}
+                                <div class="flex flex-row">
+                                    <x-input type="checkbox" class="m-1" name="location" required></x-input>
+                                    <x-label class="block m-1 w-full" for="location" value="Delete location"></x-label>
+                                </div>
+                                <x-button class="block m-1" type=submit>Delete location</x-button>
+                            </form>
+                        </div>
                     </div>
-                    <div>
-                        <canvas id="rainfall"></canvas>
-                    </div>
-                    <form action="/location/{{ $location->id }}/datapoints" method="GET">
-                        {{ csrf_field() }}
-                        <x-button class="block m-1" type="submit">Data points</x-button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -65,54 +107,23 @@
 </x-app-layout>
 <script src="{{ asset('chart.js/chart.js') }}"></script>
 <script>
-    const temperatures = JSON.parse(`{!! json_encode($temperatures) !!}`);
-    const phs = JSON.parse(`{!! json_encode($phs) !!}`);
-    const rainFalls = JSON.parse(`{!! json_encode($rainfalls) !!}`);
+    const dataPoints = JSON.parse(`{!! json_encode($dataPoints) !!}`);
+    const labels = {
+        temperature: 'Temperature °C',
+        pH: 'pH',
+        rainFall: 'Rainfall mm'
+    }
 
-    const temperatureChart = new Chart(
-        document.getElementById('temperature'),
+    const chart = new Chart(
+        document.getElementById('canvas'),
         {
             type: 'line',
             data: {
                 datasets: [{
-                    label: 'Temperature',
+                    label: labels[`{{ $sensor ?? 'temperature' }}`],
                     backgroundColor: 'rgb(255, 99, 132)',
                     borderColor: 'rgb(255, 99, 132)',
-                    data: temperatures
-                }
-                ]
-            },
-            options: {}
-        }
-    );
-
-    const phChart = new Chart(
-        document.getElementById('ph'),
-        {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: 'pH',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: phs
-                }
-                ]
-            },
-            options: {}
-        }
-    );
-
-    const rainFallChart = new Chart(
-        document.getElementById('rainfall'),
-        {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: 'Rainfall',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: rainFalls
+                    data: dataPoints
                 }
                 ]
             },

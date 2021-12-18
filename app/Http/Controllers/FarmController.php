@@ -27,22 +27,47 @@ class FarmController extends Controller
 
     public function getFarm(Request $request, $id)
     {
+        $request->validate([
+            'from' => 'nullable|date',
+            'to' => 'nullable|date',
+            'sensor' => [
+                'nullable',
+                Rule::in(['temperature', 'pH', 'rainFall'])
+            ]
+        ]);
+
         try {
             $location = Farm::where([
                 'id' => $id,
                 'user_id' => auth()->id()
             ])->firstOrFail();
 
-            $temperatures = $location->dataPoints()->where('sensortype', 'temperature')->get(['value AS y', 'datetime as x'])->toArray();
-            $phs = $location->dataPoints()->where('sensortype', 'pH')->get(['value AS y', 'datetime as x'])->toArray();
-            $rainfalls = $location->dataPoints()->where('sensortype', 'rainFall')->get(['value AS y', 'datetime as x'])->toArray();
+            $dataPoints = $location->dataPoints();
+
+            if(isset($request->from)) {
+                $dataPoints = $dataPoints->whereDate('datetime', '>=', date($request->from));   
+            }
+
+            if(isset($request->to)) {
+                $dataPoints = $dataPoints->whereDate('datetime', '<=', date($request->to));
+            }
+
+            $dataPoints = $dataPoints->where('sensortype', $request->sensor ?? 'temperature')->get(['value AS y', 'datetime as x'])->toArray();
+
+            $temperature = $location->dataPoints()->where('sensortype', 'temperature')->latest('datetime')->first();
+            $pH = $location->dataPoints()->where('sensortype', 'pH')->latest('datetime')->first();
+            $rainFall = $location->dataPoints()->where('sensortype', 'rainFall')->latest('datetime')->first();
 
             return view('location', [
                 'success' => "Location $location->location opened successfully.",
-                'temperatures' => $temperatures,
-                'phs' => $phs,
-                'rainfalls' => $rainfalls,
-                'location' => $location
+                'temperature' => $temperature,
+                'pH' => $pH,
+                'rainFall' => $rainFall,
+                'location' => $location,
+                'dataPoints' => $dataPoints,
+                'from' => $request->from ?? '',
+                'to' => $request->to ?? '',
+                'sensor' => $request->sensor ?? 'temperature'
             ]);
 
         } catch (\Exception $error) {
@@ -69,7 +94,7 @@ class FarmController extends Controller
             ])->firstOrFail();
 
             $measurements = $location->dataPoints()->count();
-            $dataPoints =$location->dataPoints();
+            $dataPoints = $location->dataPoints();
 
             if(isset($request->from)) {
                 $dataPoints = $dataPoints->whereDate('datetime', '>=', date($request->from));   
