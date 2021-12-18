@@ -83,12 +83,13 @@
                             </x-button>
                         </form>
                         <div>
-                            <canvas id="canvas"></canvas>
+                            <canvas class="bg-white rounded-lg" id="canvas"></canvas>
                         </div>
                     </div>
                     <div class="flex flex-row">
                         <div class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
-                            <form class="flex flex-col items-center" action="/location/{{ $location->id }}" method="POST">
+                            <form class="flex flex-col items-center" action="/location/{{ $location->id }}"
+                                method="POST">
                                 <h2 class="font-semibold text-l leading-tight">Delete location</h2>
                                 @method('DELETE')
                                 {{ csrf_field() }}
