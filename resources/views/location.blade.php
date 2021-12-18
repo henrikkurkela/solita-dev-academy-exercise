@@ -1,3 +1,5 @@
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -11,6 +13,38 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-success-message />
                     <x-error-message />
+                    <div class="flex flex-row">
+                        <div
+                            class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg flex flex-row items-center">
+                            <i class="fas fa-temperature-high fa-2x mr-1"></i>
+                            <div>
+                                <h2 class="font-semibold text-l leading-tight">
+                                    {{ end($temperatures)['y'] ?? '-' }} °C
+                                </h2>
+                                <p>{{ end($temperatures)['x'] ?? '-' }}</p>
+                            </div>
+                        </div>
+                        <div
+                            class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg flex flex-row items-center">
+                            <i class="fas fa-flask fa-2x mr-1"></i>
+                            <div>
+                                <h2 class="font-semibold text-l leading-tight">
+                                    pH {{ end($phs)['y'] ?? '-' }}
+                                </h2>
+                                <p>{{ end($phs)['x'] ?? '-' }}</p>
+                            </div>
+                        </div>
+                        <div
+                            class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg flex flex-row items-center">
+                            <i class="fas fa-cloud-rain fa-2x mr-1"></i>
+                            <div>
+                                <h2 class="font-semibold text-l leading-tight">
+                                    {{ end($rainfalls)['y'] ?? '-' }} mm
+                                </h2>
+                                <p>{{ end($rainfalls)['x'] ?? '-' }}</p>
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <canvas id="temperature"></canvas>
                     </div>

@@ -18,3 +18,10 @@ mix.js('resources/js/app.js', 'public/js').postCss('resources/css/app.css', 'pub
 ]);
 
 mix.copy('node_modules/chart.js/dist/chart.js', 'public/chart.js/chart.js');
+
+mix
+    .sass('resources/sass/app.scss', 'public/css')
+    .copy(
+        'node_modules/@fortawesome/fontawesome-free/webfonts',
+        'public/webfonts'
+    );
