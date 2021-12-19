@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\FarmController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,9 @@ Route::post('/location', [FarmController::class, 'addFarm'])->middleware(['auth'
 Route::get('/location/{id}', [FarmController::class, 'getFarm'])->middleware(['auth']);
 Route::get('/location/{id}/datapoints', [FarmController::class, 'getFarmTable'])->middleware(['auth']);
 Route::delete('/location/{id}', [FarmController::class, 'removeFarm'])->middleware(['auth']);
+
+Route::post('/token/create', [UserController::class, 'createToken'])->middleware(['auth']);
+Route::post('/token/revokeall', [UserController::class, 'revokeAllTokens'])->middleware(['auth']);
 
 /*
 |--------------------------------------------------------------------------
