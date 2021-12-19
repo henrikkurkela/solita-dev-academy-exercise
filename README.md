@@ -14,6 +14,7 @@ This farm data visualization app is built as an application exercise for Solita 
 - 2021-12-16: Ability to filter measurements by type and date interval (1h)
 - 2021-12-17: Add form evaluation for farm controller requests, add ability to change items per page shown for measurements pagination, prettier measurements table form (2h)
 - 2021-12-18: Add Font Awesome icons and latest measurements to location details page, move delete location form to location details page, location page chart control form (2h)
+- 2021-12-19: Change login forgot password link to registration link
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
