@@ -1,0 +1,6 @@
+location,datetime,sensorType,value
+Test Location,2018-12-31T22:00:00.000Z,pH,5.88
+Test Location,2018-12-31T22:00:00.000Z,rainFall,3.1
+Test Location,2019-01-01T11:19:44.018Z,temperature,-8.3
+Test Location,2019-01-02T11:19:44.018Z,pH,6.21
+Test Location,2019-01-02T11:19:44.018Z,rainFall,5.9
