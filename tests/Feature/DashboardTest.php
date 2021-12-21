@@ -64,4 +64,54 @@ class DashboardTest extends TestCase
         $response->assertStatus(200);
         $response->assertSeeText('5 measurements were accepted, 1 measurements were rejected.');
     }
+
+    public function test_post_create_api_token_unauthenticated_redirects_to_login()
+    {
+        $response = $this->post('/token/create');
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
+    }
+
+    public function test_post_create_api_token()
+    {
+        $user = User::factory()->create();
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+
+        $response = $this->followingRedirects()->post('/token/create');
+        $response->assertStatus(200);
+        $response->assertSeeText('API token « ');
+        $response->assertSeeText(' » created successfully.');
+    }
+
+    public function test_post_revoke_all_tokens_unauthenticated_redirects_to_login()
+    {
+        $response = $this->post('/token/revokeall');
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
+    }
+
+    public function test_post_revoke_all_tokens()
+    {
+        $user = User::factory()->create();
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+
+        $this->followingRedirects()->post('/token/create');
+
+        $response = $this->followingRedirects()->post('/token/revokeall');
+        $response->assertStatus(200);
+        $response->assertSeeText('All ');
+        $response->assertSeeText(' API tokens revoked successfully.');
+    }
 }
