@@ -2,6 +2,23 @@
 
 This farm data visualization app is built as an application exercise for Solita Dev Academy, and to gain some knowledge of modern PHP frameworks with Laravel.
 
+## Installation
+
+These example installation instructions apply for a WSL2 Ubuntu distribution.
+
+Required packages:
+- [PHP8](https://linuxize.com/post/how-to-install-php-8-on-ubuntu-20-04/). Also install php8.0-xml package.
+- [Composer](https://getcomposer.org/)
+- Docker, either [just for Linux](https://medium.com/geekculture/run-docker-in-windows-10-11-wsl-without-docker-desktop-a2a7eb90556d) or using [Docker Desktop](https://www.docker.com/products/docker-desktop). Also, install docker-compose.
+
+Installation steps:
+- Copy or rename .env.example to .env
+- Run "composer install" to install PHP depedencies
+- Run "./vendor/bin/sail up" to create and start Laravel, MySQL and PHPMyAdmin containers
+- In another terminal window, run "./vendor/bin/sail artisan migrate" to create database tables
+
+The application should now be running on [localhost](http://localhost).
+
 ## Work Log
 
 - 2021-12-09: Start project, research Laravel beginner basics, simple SQL models for farms and data points. Add PHPMyAdmin to container. (2h)
@@ -17,7 +34,7 @@ This farm data visualization app is built as an application exercise for Solita 
 - 2021-12-19: Change login forgot password link to registration link, start working on API routes with Sanctum authentication (1h)
 - 2021-12-20: Undelete password reset request migration, learn about and implement a couple of simple PHPUnit tests for web routes (3h)
 - 2021-12-21: More dashboard route PHPUnit tests, start work on location route PHPUnit tests, data point factory (1h)
-- 2021-12-22: Location route PHPUnit tests, DB checks in tests (1h)
+- 2021-12-22: Location route PHPUnit tests, DB checks in tests, installation instructions (2h)
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
