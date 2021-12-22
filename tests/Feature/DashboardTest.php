@@ -63,6 +63,12 @@ class DashboardTest extends TestCase
         ]);
         $response->assertStatus(200);
         $response->assertSeeText('5 measurements were accepted, 1 measurements were rejected.');
+        
+        $this->assertDatabaseHas('data_points', [
+            'farm_id' => $farm->id,
+            'sensortype' => 'pH',
+            'value' => '5.88'
+        ]);
     }
 
     public function test_post_create_api_token_unauthenticated_redirects_to_login()
@@ -87,6 +93,8 @@ class DashboardTest extends TestCase
         $response->assertStatus(200);
         $response->assertSeeText('API token « ');
         $response->assertSeeText(' » created successfully.');
+        
+        $this->assertDatabaseHas('personal_access_tokens', ['name' => 'api_token']);
     }
 
     public function test_post_revoke_all_tokens_unauthenticated_redirects_to_login()
@@ -108,10 +116,12 @@ class DashboardTest extends TestCase
         $this->assertAuthenticated();
 
         $this->followingRedirects()->post('/token/create');
+        $this->assertDatabaseHas('personal_access_tokens', ['name' => 'api_token']);
 
         $response = $this->followingRedirects()->post('/token/revokeall');
         $response->assertStatus(200);
         $response->assertSeeText('All ');
         $response->assertSeeText(' API tokens revoked successfully.');
+        $this->assertDatabaseMissing('personal_access_tokens', ['name' => 'api_token']);
     }
 }

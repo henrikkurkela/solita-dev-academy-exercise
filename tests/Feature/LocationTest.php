@@ -13,18 +13,7 @@ class LocationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_get_location_unauthenticated_redirects_to_login()
-    {
-        $user = User::factory()->create();
-        $farm = Farm::factory()->create(['user_id' => $user->id]);
-
-        $response = $this->get("/location/$farm->id");
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
-
-    public function test_get_location_authenticated()
-    {
+    private function create_user_and_farm_with_datapoints() {
         $user = User::factory()->create();
         $farm = Farm::factory()->create(['user_id' => $user->id]);
         DataPoint::factory()->create([
@@ -46,6 +35,22 @@ class LocationTest extends TestCase
             'value' => '12.34'
         ]);
 
+        return array($user, $farm);
+    }
+
+    public function test_get_location_unauthenticated_redirects_to_login()
+    {
+        [$user, $farm] = $this->create_user_and_farm_with_datapoints();
+
+        $response = $this->get("/location/$farm->id");
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
+    }
+
+    public function test_get_location_authenticated()
+    {
+        [$user, $farm] = $this->create_user_and_farm_with_datapoints();
+
         $response = $this->post('/login', [
             'email' => $user->email,
             'password' => 'password',
@@ -59,5 +64,58 @@ class LocationTest extends TestCase
         $response->assertSeeText('12.34 °C');
         $response->assertSeeText('pH 1.23');
         $response->assertSeeText('12.34 mm');
+    }
+
+    public function test_delete_location_unauthenticated_redirects_to_login()
+    {
+        [$user, $farm] = $this->create_user_and_farm_with_datapoints();
+
+        $response = $this->delete("/location/$farm->id");
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
+    }
+
+    public function test_delete_location_authenticated()
+    {
+        [$user, $farm] = $this->create_user_and_farm_with_datapoints();
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+
+        $response = $this->followingRedirects()->delete("/location/$farm->id");
+        $response->assertStatus(200);
+        $response->assertSeeText("Location $farm->location removed successfully.");
+    }
+
+    public function test_data_points_location_unauthenticated_redirects_to_login()
+    {
+        [$user, $farm] = $this->create_user_and_farm_with_datapoints();
+
+        $response = $this->get("/location/$farm->id/datapoints");
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
+    }
+
+    public function test_data_points_location()
+    {
+        [$user, $farm] = $this->create_user_and_farm_with_datapoints();
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+
+        $response = $this->get("/location/$farm->id/datapoints");
+        $response->assertStatus(200);
+        $response->assertSeeText($farm->location);
+        $response->assertSeeText('12.34');
+        $response->assertSeeText('1.23');
+        $response->assertSeeText('12.34');
     }
 }
