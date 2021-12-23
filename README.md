@@ -35,6 +35,7 @@ The application should now be running on [localhost](http://localhost).
 - 2021-12-20: Undelete password reset request migration, learn about and implement a couple of simple PHPUnit tests for web routes (3h)
 - 2021-12-21: More dashboard route PHPUnit tests, start work on location route PHPUnit tests, data point factory (1h)
 - 2021-12-22: Location route PHPUnit tests, DB checks in tests, installation instructions (2h)
+- 2021-12-23: More API routes (30min)
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
