@@ -3,7 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Models\Farm;
+use App\Http\Controllers\Api\ApiUserController;
+use App\Http\Controllers\Api\ApiFarmController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,21 +17,6 @@ use App\Models\Farm;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::middleware('auth:sanctum')->get('/location', function (Request $request) {
-    return Farm::where('user_id', auth()->id())->get();
-});
-
-Route::middleware('auth:sanctum')->get('/location/{id}', function (Request $request, $id) {
-    $farm = Farm::where([
-        'user_id' => auth()->id(),
-        'id' => $id
-    ])->firstOrFail();
-
-    $farm->datapoints = $farm->dataPoints()->latest('datetime')->paginate(100);
-
-    return $farm;
-});
+Route::get('/user', [ApiUserController::class, 'index'])->middleware(['auth:sanctum']);
+Route::get('/location', [ApiFarmController::class, 'index'])->middleware(['auth:sanctum']);
+Route::get('/location/{id}', [ApiFarmController::class, 'getFarm'])->middleware(['auth:sanctum']);

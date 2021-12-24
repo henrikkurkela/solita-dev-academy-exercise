@@ -34,6 +34,8 @@ Route::delete('/location/{id}', [FarmController::class, 'removeFarm'])->middlewa
 Route::post('/token/create', [UserController::class, 'createToken'])->middleware(['auth']);
 Route::post('/token/revokeall', [UserController::class, 'revokeAllTokens'])->middleware(['auth']);
 
+require __DIR__.'/auth.php';
+
 /*
 |--------------------------------------------------------------------------
 | Dev Test Routes
@@ -44,5 +46,3 @@ Route::post('/token/revokeall', [UserController::class, 'revokeAllTokens'])->mid
 */
 
 Route::post('/location/removeall', [FarmController::class, 'removeAllFarms'])->middleware(['auth']);
-
-require __DIR__.'/auth.php';
