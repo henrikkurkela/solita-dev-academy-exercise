@@ -100,6 +100,19 @@
                                 <x-button class="block m-1" type=submit>Delete location</x-button>
                             </form>
                         </div>
+                        <div class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
+                            <form class="flex flex-col items-center" action="/location/{{ $location->id }}/datapoints"
+                                method="POST">
+                                <h2 class="font-semibold text-l leading-tight">Delete measurements</h2>
+                                @method('DELETE')
+                                {{ csrf_field() }}
+                                <div class="flex flex-row">
+                                    <x-input type="checkbox" class="m-1" name="location" required></x-input>
+                                    <x-label class="block m-1 w-full" for="location" value="Delete measurements"></x-label>
+                                </div>
+                                <x-button class="block m-1" type=submit>Delete measurements</x-button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

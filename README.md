@@ -1,6 +1,6 @@
 # Solita Dev Academy Exercise 2022
 
-This farm data visualization app is built as an application exercise for Solita Dev Academy, and to gain some knowledge of modern PHP frameworks with Laravel.
+Solution for the Solita Dev Academy [farm data exercise](https://github.com/solita/dev-academy-2022-exercise), created to gain some experience with modern PHP frameworks, in this case Laravel.
 
 ## Installation
 
@@ -37,6 +37,7 @@ The application should now be running on [localhost](http://localhost).
 - 2021-12-22: Location route PHPUnit tests, DB checks in tests, installation instructions (2h)
 - 2021-12-23: More API routes (30min)
 - 2021-12-24: Location API route datetime and sensor controls, move API routes to controllers/api (1h)
+- 2021-12-25: Wipe data points for location (30min)
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 

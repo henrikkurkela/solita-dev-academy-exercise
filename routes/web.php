@@ -29,6 +29,7 @@ Route::post('/upload', [UploadController::class, 'upload'])->middleware(['auth']
 Route::post('/location', [FarmController::class, 'addFarm'])->middleware(['auth']);
 Route::get('/location/{id}', [FarmController::class, 'getFarm'])->middleware(['auth']);
 Route::get('/location/{id}/datapoints', [FarmController::class, 'getFarmTable'])->middleware(['auth']);
+Route::delete('/location/{id}/datapoints', [FarmController::class, 'removeFarmDataPoints'])->middleware(['auth']);
 Route::delete('/location/{id}', [FarmController::class, 'removeFarm'])->middleware(['auth']);
 
 Route::post('/token/create', [UserController::class, 'createToken'])->middleware(['auth']);

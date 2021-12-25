@@ -149,6 +149,22 @@ class FarmController extends Controller
         }
     }
 
+    public function removeFarmDataPoints(Request $request, $id)
+    {
+        try {
+            $location = Farm::where([
+                'id' => $id,
+                'user_id' => auth()->id()
+            ])->firstOrFail();
+
+            $measurements = $location->datapoints()->delete();
+
+            return redirect("location/$location->id")->with('success', "Removed $measurements measurements successfully.");
+        } catch (\Exception $error) {
+            return redirect('dashboard')->withErrors($error->getMessage());
+        }
+    }
+
     public function removeFarm(Request $request, $id)
     {
         try {
