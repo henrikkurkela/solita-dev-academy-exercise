@@ -159,7 +159,7 @@ class FarmController extends Controller
 
             $measurements = $location->datapoints()->delete();
 
-            return redirect("location/$location->id")->with('success', "Removed $measurements measurements successfully.");
+            return redirect("locations/$location->id")->with('success', "Removed $measurements measurements successfully.");
         } catch (\Exception $error) {
             return redirect('dashboard')->withErrors($error->getMessage());
         }

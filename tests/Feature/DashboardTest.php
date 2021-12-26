@@ -73,7 +73,7 @@ class DashboardTest extends TestCase
 
     public function test_post_create_api_token_unauthenticated_redirects_to_login()
     {
-        $response = $this->post('/token/create');
+        $response = $this->post('/tokens/create');
         $response->assertStatus(302);
         $response->assertRedirect('/login');
     }
@@ -89,7 +89,7 @@ class DashboardTest extends TestCase
 
         $this->assertAuthenticated();
 
-        $response = $this->followingRedirects()->post('/token/create');
+        $response = $this->followingRedirects()->post('/tokens/create');
         $response->assertStatus(200);
         $response->assertSeeText('API token « ');
         $response->assertSeeText(' » created successfully.');
@@ -99,7 +99,7 @@ class DashboardTest extends TestCase
 
     public function test_post_revoke_all_tokens_unauthenticated_redirects_to_login()
     {
-        $response = $this->post('/token/revokeall');
+        $response = $this->post('/tokens/revokeall');
         $response->assertStatus(302);
         $response->assertRedirect('/login');
     }
@@ -115,10 +115,10 @@ class DashboardTest extends TestCase
 
         $this->assertAuthenticated();
 
-        $this->followingRedirects()->post('/token/create');
+        $this->followingRedirects()->post('/tokens/create');
         $this->assertDatabaseHas('personal_access_tokens', ['name' => 'api_token']);
 
-        $response = $this->followingRedirects()->post('/token/revokeall');
+        $response = $this->followingRedirects()->post('/tokens/revokeall');
         $response->assertStatus(200);
         $response->assertSeeText('All ');
         $response->assertSeeText(' API tokens revoked successfully.');

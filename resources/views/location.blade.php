@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="w-auto m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
-                        <form action="/location/{{ $location->id }}" method="GET">
+                        <form action="/locations/{{ $location->id }}" method="GET">
                             {{ csrf_field() }}
                             <div class="flex flex-row">
                                 <div class="m-1">
@@ -78,7 +78,7 @@
                                 Apply
                             </x-button>
                             <x-button class="block m-1" type="submit"
-                                formaction="/location/{{ $location->id }}/datapoints">
+                                formaction="/locations/{{ $location->id }}/datapoints">
                                 Data points
                             </x-button>
                         </form>
@@ -88,7 +88,7 @@
                     </div>
                     <div class="flex flex-row">
                         <div class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
-                            <form class="flex flex-col items-center" action="/location/{{ $location->id }}"
+                            <form class="flex flex-col items-center" action="/locations/{{ $location->id }}"
                                 method="POST">
                                 <h2 class="font-semibold text-l leading-tight">Delete location</h2>
                                 @method('DELETE')
@@ -101,7 +101,7 @@
                             </form>
                         </div>
                         <div class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
-                            <form class="flex flex-col items-center" action="/location/{{ $location->id }}/datapoints"
+                            <form class="flex flex-col items-center" action="/locations/{{ $location->id }}/datapoints"
                                 method="POST">
                                 <h2 class="font-semibold text-l leading-tight">Delete measurements</h2>
                                 @method('DELETE')

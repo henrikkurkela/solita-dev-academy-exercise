@@ -26,14 +26,14 @@ Route::get('/dashboard', [Controller::class, 'dashboard'])->middleware(['auth'])
 
 Route::post('/upload', [UploadController::class, 'upload'])->middleware(['auth']);
 
-Route::post('/location', [FarmController::class, 'addFarm'])->middleware(['auth']);
-Route::get('/location/{id}', [FarmController::class, 'getFarm'])->middleware(['auth']);
-Route::get('/location/{id}/datapoints', [FarmController::class, 'getFarmTable'])->middleware(['auth']);
-Route::delete('/location/{id}/datapoints', [FarmController::class, 'removeFarmDataPoints'])->middleware(['auth']);
-Route::delete('/location/{id}', [FarmController::class, 'removeFarm'])->middleware(['auth']);
+Route::post('/locations', [FarmController::class, 'addFarm'])->middleware(['auth']);
+Route::get('/locations/{id}', [FarmController::class, 'getFarm'])->middleware(['auth']);
+Route::get('/locations/{id}/datapoints', [FarmController::class, 'getFarmTable'])->middleware(['auth']);
+Route::delete('/locations/{id}/datapoints', [FarmController::class, 'removeFarmDataPoints'])->middleware(['auth']);
+Route::delete('/locations/{id}', [FarmController::class, 'removeFarm'])->middleware(['auth']);
 
-Route::post('/token/create', [UserController::class, 'createToken'])->middleware(['auth']);
-Route::post('/token/revokeall', [UserController::class, 'revokeAllTokens'])->middleware(['auth']);
+Route::post('/tokens/create', [UserController::class, 'createToken'])->middleware(['auth']);
+Route::post('/tokens/revokeall', [UserController::class, 'revokeAllTokens'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';
 
@@ -46,4 +46,4 @@ require __DIR__.'/auth.php';
 |
 */
 
-Route::post('/location/removeall', [FarmController::class, 'removeAllFarms'])->middleware(['auth']);
+Route::post('/locations/removeall', [FarmController::class, 'removeAllFarms'])->middleware(['auth']);

@@ -42,7 +42,7 @@ class LocationTest extends TestCase
     {
         [$user, $farm] = $this->create_user_and_farm_with_datapoints();
 
-        $response = $this->get("/location/$farm->id");
+        $response = $this->get("/locations/$farm->id");
         $response->assertStatus(302);
         $response->assertRedirect('/login');
     }
@@ -58,7 +58,7 @@ class LocationTest extends TestCase
 
         $this->assertAuthenticated();
 
-        $response = $this->get("/location/$farm->id");
+        $response = $this->get("/locations/$farm->id");
         $response->assertStatus(200);
         $response->assertSeeText($farm->location);
         $response->assertSeeText('12.34 °C');
@@ -70,7 +70,7 @@ class LocationTest extends TestCase
     {
         [$user, $farm] = $this->create_user_and_farm_with_datapoints();
 
-        $response = $this->delete("/location/$farm->id");
+        $response = $this->delete("/locations/$farm->id");
         $response->assertStatus(302);
         $response->assertRedirect('/login');
     }
@@ -86,7 +86,7 @@ class LocationTest extends TestCase
 
         $this->assertAuthenticated();
 
-        $response = $this->followingRedirects()->delete("/location/$farm->id");
+        $response = $this->followingRedirects()->delete("/locations/$farm->id");
         $response->assertStatus(200);
         $response->assertSeeText("Location $farm->location removed successfully.");
     }
@@ -95,7 +95,7 @@ class LocationTest extends TestCase
     {
         [$user, $farm] = $this->create_user_and_farm_with_datapoints();
 
-        $response = $this->get("/location/$farm->id/datapoints");
+        $response = $this->get("/locations/$farm->id/datapoints");
         $response->assertStatus(302);
         $response->assertRedirect('/login');
     }
@@ -111,7 +111,7 @@ class LocationTest extends TestCase
 
         $this->assertAuthenticated();
 
-        $response = $this->get("/location/$farm->id/datapoints");
+        $response = $this->get("/locations/$farm->id/datapoints");
         $response->assertStatus(200);
         $response->assertSeeText($farm->location);
         $response->assertSeeText('12.34');

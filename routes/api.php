@@ -18,5 +18,5 @@ use App\Http\Controllers\Api\ApiFarmController;
 */
 
 Route::get('/user', [ApiUserController::class, 'index'])->middleware(['auth:sanctum']);
-Route::get('/location', [ApiFarmController::class, 'index'])->middleware(['auth:sanctum']);
-Route::get('/location/{id}', [ApiFarmController::class, 'getFarm'])->middleware(['auth:sanctum']);
+Route::get('/locations', [ApiFarmController::class, 'index'])->middleware(['auth:sanctum']);
+Route::get('/locations/{id}', [ApiFarmController::class, 'getFarm'])->middleware(['auth:sanctum']);

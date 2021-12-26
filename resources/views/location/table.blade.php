@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <a href="/location/{{ $location->id }}">{{ $location->location }}</a> → Measurements
+            <a href="/locations/{{ $location->id }}">{{ $location->location }}</a> → Measurements
         </h2>
     </x-slot>
 
@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-success-message />
                     <x-error-message />
-                    <form action="/location/{{ $location->id }}/datapoints" method="GET">
+                    <form action="/locations/{{ $location->id }}/datapoints" method="GET">
                         {{ csrf_field() }}
                         <div class="flex flex-row">
                             <div class="m-1">

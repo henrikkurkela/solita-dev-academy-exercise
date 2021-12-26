@@ -17,7 +17,7 @@
                         @foreach( $farms as $farm )
                         <div class="flex flex-row justify-between">
                             <p>{{ $farm->location }}</p>
-                            <form action="/location/{{ $farm->id }}" method="GET">
+                            <form action="/locations/{{ $farm->id }}" method="GET">
                                 {{ csrf_field() }}
                                 <x-button class="block m-1" type="submit">Open location</x-button>
                             </form>
@@ -27,7 +27,7 @@
                     @endif
                     <div class="flex flex-row">
                         <div class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
-                            <form class="flex flex-col items-center" action="/location" method="POST">
+                            <form class="flex flex-col items-center" action="/locations" method="POST">
                                 <h2 class="font-semibold text-l leading-tight">Add new location</h2>
                                 {{ csrf_field() }}
                                 <x-label class="block m-1 w-full" for="location" value="Location"></x-label>
@@ -47,15 +47,15 @@
                         </div>
                         <div class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
                             <h2 class="font-semibold text-l leading-tight text-center">Developer options</h2>
-                            <form class="flex flex-col items-center" action="/location/removeall" method="POST">
+                            <form class="flex flex-col items-center" action="/locations/removeall" method="POST">
                                 {{ csrf_field() }}
                                 <x-button class="block m-1" type=submit>Nuke DB</x-button>
                             </form>
-                            <form class="flex flex-col items-center" action="/token/create" method="POST">
+                            <form class="flex flex-col items-center" action="/tokens/create" method="POST">
                                 {{ csrf_field() }}
                                 <x-button class="block m-1" type=submit>Create API token</x-button>
                             </form>
-                            <form class="flex flex-col items-center" action="/token/revokeall" method="POST">
+                            <form class="flex flex-col items-center" action="/tokens/revokeall" method="POST">
                                 {{ csrf_field() }}
                                 <x-button class="block m-1" type=submit>Revoke all API tokens</x-button>
                             </form>
