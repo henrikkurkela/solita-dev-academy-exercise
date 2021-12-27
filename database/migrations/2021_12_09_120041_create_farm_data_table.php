@@ -27,6 +27,7 @@ class CreateFarmDataTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('location');
+            $table->unique(['location', 'user_id']);
             $table->timestamps();
         });
 
@@ -36,6 +37,7 @@ class CreateFarmDataTable extends Migration
             $table->string('datetime');
             $table->string('sensortype');
             $table->decimal('value', 10, 2);
+            $table->unique(['datetime', 'sensortype', 'value', 'farm_id']);
             $table->timestamps();
         });
     }

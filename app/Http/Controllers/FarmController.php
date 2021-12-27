@@ -14,15 +14,19 @@ class FarmController extends Controller
     public function addFarm(Request $request)
     {
         $request->validate([
-            'location' => 'required|unique:farms'
+            'location' => 'required'
         ]);
 
-        $location = Farm::firstOrCreate([
-            'location' => $request->location,
-            'user_id' => auth()->id()
-        ]);
+        try {
+            $location = Farm::create([
+                'location' => $request->location,
+                'user_id' => auth()->id()
+            ]);
 
-        return redirect('dashboard')->with('success', "Location $location->location created successfully.");
+            return redirect('dashboard')->with('success', "Location $location->location created successfully.");
+        } catch (\Exception $error) {
+            return redirect('dashboard')->withErrors($error->getMessage());
+        }
     }
 
     public function getFarm(Request $request, $id)
@@ -44,11 +48,11 @@ class FarmController extends Controller
 
             $dataPoints = $location->dataPoints();
 
-            if(isset($request->from)) {
-                $dataPoints = $dataPoints->whereDate('datetime', '>=', date($request->from));   
+            if (isset($request->from)) {
+                $dataPoints = $dataPoints->whereDate('datetime', '>=', date($request->from));
             }
 
-            if(isset($request->to)) {
+            if (isset($request->to)) {
                 $dataPoints = $dataPoints->whereDate('datetime', '<=', date($request->to));
             }
 
@@ -69,7 +73,6 @@ class FarmController extends Controller
                 'to' => $request->to ?? '',
                 'sensor' => $request->sensor ?? 'temperature'
             ]);
-
         } catch (\Exception $error) {
             return redirect('dashboard')->withErrors($error->getMessage());
         }
@@ -96,15 +99,15 @@ class FarmController extends Controller
             $measurements = $location->dataPoints()->count();
             $dataPoints = $location->dataPoints();
 
-            if(isset($request->from)) {
-                $dataPoints = $dataPoints->whereDate('datetime', '>=', date($request->from));   
+            if (isset($request->from)) {
+                $dataPoints = $dataPoints->whereDate('datetime', '>=', date($request->from));
             }
 
-            if(isset($request->to)) {
+            if (isset($request->to)) {
                 $dataPoints = $dataPoints->whereDate('datetime', '<=', date($request->to));
             }
-            
-            switch($request->sensor ?? '') {
+
+            switch ($request->sensor ?? '') {
                 case 'temperature':
                     $dataPoints = $dataPoints->where('sensortype', 'temperature')->orderByDesc('datetime');
                     break;
@@ -119,7 +122,7 @@ class FarmController extends Controller
             }
 
             if (isset($request->pagination)) {
-                switch($request->pagination) {
+                switch ($request->pagination) {
                     case '10':
                         $dataPoints = $dataPoints->paginate(10);
                         break;
