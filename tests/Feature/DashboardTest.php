@@ -63,11 +63,45 @@ class DashboardTest extends TestCase
         ]);
         $response->assertStatus(200);
         $response->assertSeeText('5 measurements were accepted, 1 measurements were rejected.');
-        
+
         $this->assertDatabaseHas('data_points', [
             'farm_id' => $farm->id,
             'sensortype' => 'pH',
             'value' => '5.88'
+        ]);
+    }
+
+    public function test_post_create_location_unauthenticated_redirects_to_login()
+    {
+        $response = $this->post('/locations', [
+            'location' => 'New Location'
+        ]);
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
+
+        $this->assertDatabaseMissing('farms', ['location' => 'New Location']);
+    }
+
+    public function test_post_create_location_authenticated()
+    {
+        $user = User::factory()->create();
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+
+        $response = $this->followingRedirects()->post('/locations', [
+            'location' => 'New Location'
+        ]);
+        $response->assertStatus(200);
+        $response->assertSeeText('Location New Location created successfully.');
+
+        $this->assertDatabaseHas('farms', [
+            'user_id' => $user->id,
+            'location' => 'New Location'
         ]);
     }
 
@@ -76,6 +110,8 @@ class DashboardTest extends TestCase
         $response = $this->post('/tokens/create');
         $response->assertStatus(302);
         $response->assertRedirect('/login');
+
+        $this->assertDatabaseCount('personal_access_tokens', 0);
     }
 
     public function test_post_create_api_token()
@@ -93,7 +129,7 @@ class DashboardTest extends TestCase
         $response->assertStatus(200);
         $response->assertSeeText('API token « ');
         $response->assertSeeText(' » created successfully.');
-        
+
         $this->assertDatabaseHas('personal_access_tokens', ['name' => 'api_token']);
     }
 
