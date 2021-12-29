@@ -56,17 +56,27 @@
                             Apply
                         </x-button>
                     </form>
-                    <table class="w-full whitespace-no-wrap">
+                    <table class="w-full table-auto">
                         <tr>
                             <th class="border">Sensor</th>
                             <th class="border">Value</th>
-                            <th class="border">Time</th>
+                            <th class="border min-w-full">Time</th>
+                            <th class="border">Actions</th>
                         </tr>
                         @foreach ($dataPoints as $dataPoint)
                         <tr>
                             <td class="border">{{ $dataPoint->sensortype }}</td>
                             <td class="border">{{ $dataPoint->value }}</td>
                             <td class="border">{{ $dataPoint->datetime }}</td>
+                            <td class="border">
+                                <form action="/locations/{{ $location->id }}/datapoints/{{ $dataPoint->id }}" method="POST">
+                                    @method('DELETE')
+                                    {{ csrf_field() }}
+                                    <x-button class="block m-1" type="submit">
+                                        Delete
+                                    </x-button>
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
                     </table>

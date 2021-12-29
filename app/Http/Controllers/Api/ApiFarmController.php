@@ -15,6 +15,12 @@ class ApiFarmController extends Controller
         return Farm::where('user_id', auth()->id())->get();
     }
 
+    /**
+     * @urlParam id integer required The ID of the location.
+     * @bodyParam from string optional Show measurements on or after this date.
+     * @bodyParam to string optional Show measurements on or before this date.
+     * @bodyParam sensor string optional Show measurements of only this sensortype.
+     */
     public function getFarm(Request $request, $id) {
 
         $request->validate([

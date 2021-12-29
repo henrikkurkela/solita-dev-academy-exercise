@@ -41,6 +41,7 @@ The application should now be running on [localhost](http://localhost).
 - 2021-12-26: Pluralize routes as according to [Laravel best practices](https://github.com/alexeymezenin/laravel-best-practices) (30min)
 - 2021-12-27: Move datapoint checks from controller to model, add POST datapoint API route, unique index for datapoints instead of firstOrCreate, unique index for locations instead of firstOrCreate (2h)
 - 2021-12-28: Extend dashboard and location tests, tests for API routes (2h)
+- 2021-12-29: Delete single measurement functionality, tests, generate API documentation using [Scribe](https://scribe.knuckles.wtf/) (2h)
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 

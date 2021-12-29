@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 use App\Models\Farm;
-use App\Models\DataPoint;
 
 class FarmController extends Controller
 {
@@ -56,7 +55,7 @@ class FarmController extends Controller
                 $dataPoints = $dataPoints->whereDate('datetime', '<=', date($request->to));
             }
 
-            $dataPoints = $dataPoints->where('sensortype', $request->sensor ?? 'temperature')->get(['value AS y', 'datetime as x'])->toArray();
+            $dataPoints = $dataPoints->where('sensortype', $request->sensor ?? 'temperature')->oldest('datetime')->get(['value AS y', 'datetime as x'])->toArray();
 
             $temperature = $location->dataPoints()->where('sensortype', 'temperature')->latest('datetime')->first();
             $pH = $location->dataPoints()->where('sensortype', 'pH')->latest('datetime')->first();
@@ -147,6 +146,26 @@ class FarmController extends Controller
                 'sensor' => $request->sensor ?? '',
                 'pagination' => $request->pagination ?? ''
             ]);
+        } catch (\Exception $error) {
+            return redirect('dashboard')->withErrors($error->getMessage());
+        }
+    }
+
+    public function removeFarmDataPoint(Request $request, $id, $number)
+    {
+        try {
+            $location = Farm::where([
+                'id' => $id,
+                'user_id' => auth()->id()
+            ])->firstOrFail();
+
+            $measurement = $location->datapoints()->where([
+                'id' => $number
+            ]);
+
+            $measurement->delete();
+
+            return redirect()->back()->with('success', "Measurement removed successfully.");
         } catch (\Exception $error) {
             return redirect('dashboard')->withErrors($error->getMessage());
         }

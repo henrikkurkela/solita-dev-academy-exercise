@@ -143,6 +143,58 @@ class LocationTest extends TestCase
         $response->assertSeeText('12.34');
     }
 
+    public function test_delete_data_point_unauthenticated_redirects_to_login()
+    {
+        [$user, $farm] = $this->create_user_and_farm_with_datapoints();
+
+        $response = $this->delete("/locations/$farm->id/datapoints/{$farm->datapoints()->first()->id}");
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
+
+        $this->assertDatabaseHas('data_points', ['id' => $farm->datapoints()->first()->id]);
+    }
+
+    public function test_delete_data_point_location_not_owned_authenticated()
+    {
+        [$userOne, $farmOne] = $this->create_user_and_farm_with_datapoints();
+        [$userTwo, $farmTwo] = $this->create_user_and_farm_with_datapoints();
+
+        $response = $this->post('/login', [
+            'email' => $userTwo->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+
+        $response = $this->followingRedirects()->delete("/locations/$farmOne->id/datapoints/{$farmOne->datapoints()->first()->id}");
+        $response->assertStatus(200);
+        $response->assertSeeText("Error!");
+        $response->assertSeeText("No query results for model");
+
+        $this->assertDatabaseHas('data_points', ['id' => $farmOne->datapoints()->first()->id]);
+    }
+
+    public function test_delete_data_point_authenticated()
+    {
+        [$user, $farm] = $this->create_user_and_farm_with_datapoints();
+        $dataPoint = $farm->datapoints()->first();
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+
+        $this->get("/locations/$farm->id/datapoints");
+
+        $response = $this->followingRedirects()->delete("/locations/$farm->id/datapoints/$dataPoint->id");
+        $response->assertStatus(200);
+        $response->assertSeeText('Measurement removed successfully.');
+
+        $this->assertDatabaseMissing('data_points', ['id' => $dataPoint->id]);
+    }
+
     public function test_delete_data_points_unauthenticated_redirects_to_login()
     {
         [$user, $farm] = $this->create_user_and_farm_with_datapoints();
