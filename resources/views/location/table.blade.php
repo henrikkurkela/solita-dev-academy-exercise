@@ -13,7 +13,7 @@
                     <x-error-message />
                     <form action="/locations/{{ $location->id }}/datapoints" method="GET">
                         {{ csrf_field() }}
-                        <div class="flex flex-row">
+                        <div class="flex flex-row flex-wrap">
                             <div class="m-1">
                                 <x-label for="from">From</x-label>
                                 <x-input type="date" name="from" id="from" value="{{ $from ?? '' }}" />
@@ -56,29 +56,34 @@
                             Apply
                         </x-button>
                     </form>
-                    <table class="w-full table-auto">
-                        <tr>
-                            <th class="border">Sensor</th>
-                            <th class="border">Value</th>
-                            <th class="border min-w-full">Time</th>
-                            <th class="border">Actions</th>
-                        </tr>
-                        @foreach ($dataPoints as $dataPoint)
-                        <tr>
-                            <td class="border">{{ $dataPoint->sensortype }}</td>
-                            <td class="border">{{ $dataPoint->value }}</td>
-                            <td class="border">{{ $dataPoint->datetime }}</td>
-                            <td class="border">
-                                <form action="/locations/{{ $location->id }}/datapoints/{{ $dataPoint->id }}" method="POST">
-                                    @method('DELETE')
-                                    {{ csrf_field() }}
-                                    <x-button class="block m-1" type="submit">
-                                        Delete
-                                    </x-button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
+                    <table class="table-fixed">
+                        <thead>
+                            <tr>
+                                <th class="border w-1/3">Sensor</th>
+                                <th class="border w-1/3">Value</th>
+                                <th class="border w-1/3">Time</th>
+                                <th class="border w-fit">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($dataPoints as $dataPoint)
+                            <tr>
+                                <td class="border">{{ $dataPoint->sensortype }}</td>
+                                <td class="border">{{ $dataPoint->value }}</td>
+                                <td class="border">{{ $dataPoint->datetime }}</td>
+                                <td class="border">
+                                    <form action="/locations/{{ $location->id }}/datapoints/{{ $dataPoint->id }}"
+                                        method="POST">
+                                        @method('DELETE')
+                                        {{ csrf_field() }}
+                                        <x-button class="block m-1" type="submit">
+                                            Delete
+                                        </x-button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                     {{ $dataPoints->appends($_GET)->links() }}
                 </div>

@@ -47,17 +47,10 @@
                         </div>
                         <div class="w-full sm:max-w-md m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
                             <h2 class="font-semibold text-l leading-tight text-center">Developer options</h2>
-                            <form class="flex flex-col items-center" action="/locations/removeall" method="POST">
+                            <form class="flex flex-col items-center" action="/tokens" method="GET">
                                 {{ csrf_field() }}
-                                <x-button class="block m-1" type=submit>Nuke DB</x-button>
+                                <x-button class="block m-1" type=submit>API tokens</x-button>
                             </form>
-                            <form class="flex flex-col items-center" action="/tokens/create" method="POST">
-                                {{ csrf_field() }}
-                                <x-button class="block m-1" type=submit>Create API token</x-button>
-                            </form>
-                            <form class="flex flex-col items-center" action="/tokens/revokeall" method="POST">
-                                {{ csrf_field() }}
-                                <x-button class="block m-1" type=submit>Revoke all API tokens</x-button>
                             </form>
                         </div>
                     </div>

@@ -33,18 +33,9 @@ Route::delete('/locations/{id}/datapoints/{number}', [FarmController::class, 're
 Route::delete('/locations/{id}/datapoints', [FarmController::class, 'removeFarmDataPoints'])->middleware(['auth']);
 Route::delete('/locations/{id}', [FarmController::class, 'removeFarm'])->middleware(['auth']);
 
+Route::get('/tokens', [UserController::class, 'getTokens'])->middleware(['auth']);
+Route::delete('/tokens/{id}', [UserController::class, 'revokeToken'])->middleware(['auth']);
 Route::post('/tokens/create', [UserController::class, 'createToken'])->middleware(['auth']);
 Route::post('/tokens/revokeall', [UserController::class, 'revokeAllTokens'])->middleware(['auth']);
 
-require __DIR__.'/auth.php';
-
-/*
-|--------------------------------------------------------------------------
-| Dev Test Routes
-|--------------------------------------------------------------------------
-|
-| These routes should be removed before production.
-|
-*/
-
-Route::post('/locations/removeall', [FarmController::class, 'removeAllFarms'])->middleware(['auth']);
+require __DIR__ . '/auth.php';

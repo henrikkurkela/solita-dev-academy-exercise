@@ -48,7 +48,7 @@
                     <div class="w-auto m-6 p-6 bg-gray-100 shadow-md overflow-hidden sm:rounded-lg">
                         <form action="/locations/{{ $location->id }}" method="GET">
                             {{ csrf_field() }}
-                            <div class="flex flex-row">
+                            <div class="flex flex-row flex-wrap">
                                 <div class="m-1">
                                     <x-label for="from">From</x-label>
                                     <x-input type="date" name="from" id="from" value="{{ $from ?? '' }}" />
@@ -108,7 +108,8 @@
                                 {{ csrf_field() }}
                                 <div class="flex flex-row">
                                     <x-input type="checkbox" class="m-1" name="location" required></x-input>
-                                    <x-label class="block m-1 w-full" for="location" value="Delete measurements"></x-label>
+                                    <x-label class="block m-1 w-full" for="location" value="Delete measurements">
+                                    </x-label>
                                 </div>
                                 <x-button class="block m-1" type=submit>Delete measurements</x-button>
                             </form>
